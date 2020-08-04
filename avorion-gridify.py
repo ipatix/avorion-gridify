@@ -4,6 +4,7 @@ import xmltodict
 import dicttoxml
 import xml
 import argparse
+import sys
 
 if __name__ == "__main__":
     
@@ -19,8 +20,13 @@ if __name__ == "__main__":
     
     with open(args.ORIG_FILE, "r") as handle:
         xmltext = handle.read()
-    
-    ship = xmltodict.parse(xmltext)
+
+    ship = None
+    try:
+        ship = xmltodict.parse(xmltext)
+    except xml.parsers.expat.ExpatError as e:
+        print("Invalid XML: {}".format(e))
+        sys.exit(1)
     
     xmltext = '<?xml version="1.0" encoding="utf-8"?>\n'
     
