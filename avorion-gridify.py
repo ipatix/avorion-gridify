@@ -7,9 +7,9 @@ import argparse
 import sys
 
 if __name__ == "__main__":
-    
-    parser = argparse.ArgumentParser(description='Round sizes of your ship to integer multiples of grid size',
-                            formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+    HELP_TEXT = 'Round sizes of your ship to integer multiples of grid size'
+    parser = argparse.ArgumentParser(description=HELP_TEXT)
 
     parser.add_argument("GRID_SIZE",   type=float, help="Grid size to align to")
     parser.add_argument("ORIG_FILE",   type=str,   help="XML-file describing your ship")
@@ -39,7 +39,8 @@ if __name__ == "__main__":
         plan = design['plan']
     
         xmltext += '<' + ship_design + '>\n'
-        xmltext += '\t<plan accumulateHealth="{}" convex="{}">\n'.format(plan['@accumulateHealth'], plan['@convex'])
+        helperText = '\t<plan accumulateHealth="{}" convex="{}">\n'
+        xmltext += helperText.format(plan['@accumulateHealth'], plan['@convex'])
     
         for item in plan['item']:
             xmltext += '\t\t<item parent="{}" index="{}">\n'.format(item['@parent'], item['@index'])
@@ -60,8 +61,9 @@ if __name__ == "__main__":
             look = block['@look']
             up = block['@up']
             color = block['@color']
-            xmltext += '\t\t\t<block lx="{}" ly="{}" lz="{}" ux="{}" uy="{}" uz="{}" index="{}" material="{}" look="{}" up="{}" color="{}"/>\n'.format(
-                    lx, ly, lz, ux, uy, uz, index, material, look, up, color)
+            line =  '\t\t\t<block lx="{}" ly="{}" lz="{}" ux="{}" uy="{}" uz="{}"'
+            line += 'index="{}" material="{}" look="{}" up="{}" color="{}"/>\n'
+            xmltext += line.format(lx, ly, lz, ux, uy, uz, index, material, look, up, color)
     
             xmltext += '\t\t</item>\n'
         # end for
