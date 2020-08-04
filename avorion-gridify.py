@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 
-import sys
 import xmltodict
 import dicttoxml
 import xml
+import argparse
 
 if __name__ == "__main__":
+    
+    parser = argparse.ArgumentParser(description='Round sizes of your ship to integer multiples of grid size',
+                            formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    if len(sys.argv) != 4:
-        print('usage: ./avorion-gridify <grid-size> <original_ship.xml> <modified_ship.xml>')
-        print('example: ./avorion-gridify 0.5 myships/ship.xml experiments/newship.xml')
-        sys.exit(1)
+    parser.add_argument("GRID_SIZE",   type=float, help="Grid size to align to")
+    parser.add_argument("ORIG_FILE",   type=str,   help="XML-file describing your ship")
+    parser.add_argument("TARGET_FILE", type=str,   help="XML-file to save the ship to")
+    args = parser.parse_args()
+
+    grid = args.GRID_SIZE
     
-    grid = float(sys.argv[1])
-    
-    with open(sys.argv[2], "r") as handle:
+    with open(args.ORIG_FILE, "r") as handle:
         xmltext = handle.read()
     
     ship = xmltodict.parse(xmltext)
@@ -60,5 +63,5 @@ if __name__ == "__main__":
         xmltext += '\t</plan>\n'
         xmltext += '</' + ship_design + '>\n'
     
-    with open(sys.argv[3], "w") as handle:
+    with open(args.TARGET_FILE, "w") as handle:
         handle.write(xmltext)
